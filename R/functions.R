@@ -17,6 +17,7 @@ update_docker <- function() {
   system('cp -r misc/. /home/fdrennan/docker_api')
   system('cp -r R/plumber.R /home/fdrennan/docker_api/plumber.R')
   # docker run --rm -d -p 8000:8000 -v `pwd`/plumber.R:/plumber.R dockerfile /plumber.R
+  # cd /home/fdrennan/docker_api
 }
 
 

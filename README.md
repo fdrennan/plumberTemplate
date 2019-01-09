@@ -54,34 +54,81 @@ docker build -t dockerfile .
 docker run --rm -d -p 8000:8000 -v `pwd`/plumber.R:/plumber.R dockerfile /plumber.R
 ```
 
-/etc/nginx/conf.d
+```
+sudo apt  install docker-compose
+```
+
+Use filename below
+/etc/nginx/conf.d/nginx.conf
 ```
 upstream myproject {
-    server ranalytics.medianewsgroup.com:8000;
-    server ranalytics.medianewsgroup.com:8001;
-    server ranalytics.medianewsgroup.com:8002;
-    server ranalytics.medianewsgroup.com:8003;
-    server ranalytics.medianewsgroup.com:8004;
-    server ranalytics.medianewsgroup.com:8005;
-    server ranalytics.medianewsgroup.com:8006;
-    server ranalytics.medianewsgroup.com:8007;
-    server ranalytics.medianewsgroup.com:8008;
-    server ranalytics.medianewsgroup.com:8009;
-    server ranalytics.medianewsgroup.com:8010;
+    server 18.220.132.82:8000;
+    server 18.220.132.82:8001;
+    server 18.220.132.82:8002;
+    server 18.220.132.82:8003;
+    server 18.220.132.82:8004;
+    server 18.220.132.82:8005;
+    server 18.220.132.82:8006;
+    server 18.220.132.82:8007;
+    server 18.220.132.82:8008;
+    server 18.220.132.82:8009;
+    server 18.220.132.82:8010;
  }
 
   server {
     listen 80;
-    server_name ranalytics.medianewsgroup.com;
+    server_name 18.220.132.82;
     location / {
       proxy_pass http://myproject;
     }
   }
 
 ```
-
 as root
 /etc/init.d/nginx start
 ```
 apt-get install nginx
 ```
+
+```
+docker-container up -d
+```
+
+18.220.132.82:8000/pdf
+
+
+```
+siege -c 10 -r 10 -b 18.220.132.82/meggan
+```
+
+```
+Transactions:		       19099 hits
+Availability:		       95.49 %
+Elapsed time:		       83.25 secs
+Data transferred:	       30.98 MB
+Response time:		        0.36 secs
+Transaction rate:	      229.42 trans/sec
+Throughput:		        0.37 MB/sec
+Concurrency:		       81.99
+Successful transactions:       19099
+Failed transactions:	         901
+Longest transaction:	        7.62
+Shortest transaction:	        0.09
+ ```
+ 
+```
+ Transactions:		       19339 hits
+Availability:		       96.69 %
+Elapsed time:		       80.16 secs
+Data transferred:	       31.37 MB
+Response time:		        0.46 secs
+Transaction rate:	      241.25 trans/sec
+Throughput:		        0.39 MB/sec
+Concurrency:		      110.47
+Successful transactions:       19339
+Failed transactions:	         661
+Longest transaction:	        7.26
+Shortest transaction:	        0.09
+```
+
+
