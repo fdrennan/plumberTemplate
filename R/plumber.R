@@ -1,6 +1,3 @@
-# plumber.R
-library(plumberTemplate)
-
 #* @get /meggan
 function(n=100, string = 'I love Meggan!'){
   a = rep(string, n)

@@ -4,6 +4,11 @@ sudo apt install apt-transport-https ca-certificates curl software-properties-co
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable"
 sudo apt update -y
+sudo apt-get install git-core
+sudo apt-get install default-jdk
+sudo apt-get install libgdal-dev libproj-dev
+sudo apt-get install libcurl4-openssl-dev libssl-dev libxml2-dev --y
+sudo R CMD javareconf
 apt-cache policy docker-ce
 sudo apt install docker-ce -y
 sudo systemctl status docker
@@ -24,3 +29,23 @@ sudo gdebi rstudio-server-1.1.463-amd64.deb
 wget https://download3.rstudio.org/ubuntu-14.04/x86_64/shiny-server-1.5.9.923-amd64.deb
 sudo gdebi shiny-server-1.5.9.923-amd64.deb 
 ```
+
+
+```
+adduser fdrennan
+usermod -aG docker fdrennan
+usermod -aG sudo fdrennan
+```
+
+```
+git config --global user.name "Freddy Drennan"
+git config --global user.email "drennanfreddy@gmail.com"
+```
+
+
+```
+ssh-keygen -t rsa
+cd /home/fdrennan/.ssh/id_rsa.pub
+git@github.com:fdrennan/plumberTemplate.git
+```
+
