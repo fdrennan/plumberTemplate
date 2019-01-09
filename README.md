@@ -49,3 +49,39 @@ cd /home/fdrennan/.ssh/id_rsa.pub
 git@github.com:fdrennan/plumberTemplate.git
 ```
 
+```
+docker build -t dockerfile .
+docker run --rm -d -p 8000:8000 -v `pwd`/plumber.R:/plumber.R dockerfile /plumber.R
+```
+
+/etc/nginx/conf.d
+```
+upstream myproject {
+    server ranalytics.medianewsgroup.com:8000;
+    server ranalytics.medianewsgroup.com:8001;
+    server ranalytics.medianewsgroup.com:8002;
+    server ranalytics.medianewsgroup.com:8003;
+    server ranalytics.medianewsgroup.com:8004;
+    server ranalytics.medianewsgroup.com:8005;
+    server ranalytics.medianewsgroup.com:8006;
+    server ranalytics.medianewsgroup.com:8007;
+    server ranalytics.medianewsgroup.com:8008;
+    server ranalytics.medianewsgroup.com:8009;
+    server ranalytics.medianewsgroup.com:8010;
+ }
+
+  server {
+    listen 80;
+    server_name ranalytics.medianewsgroup.com;
+    location / {
+      proxy_pass http://myproject;
+    }
+  }
+
+```
+
+as root
+/etc/init.d/nginx start
+```
+apt-get install nginx
+```
