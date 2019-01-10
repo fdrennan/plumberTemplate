@@ -86,7 +86,7 @@ create_question <- function(
   }
 
   dbDisconnect(con)
-  toJSON(question, pretty = TRUE)
+  return(toJSON(question, pretty = TRUE))
 }
 
 #' @export get_question
@@ -107,7 +107,7 @@ get_question <- function(
     )
   response <- tbl(con, sql(query)) %>% as.data.frame
   dbDisconnect(con)
-  toJSON(response, pretty = TRUE)
+  return(toJSON(response, pretty = TRUE))
 }
 
 

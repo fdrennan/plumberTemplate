@@ -61,7 +61,6 @@ create_question <- function(chapter         = NA,
       return(response)
     }
   )
-
   return(response)
 }
 
