@@ -32,7 +32,7 @@ create_question <- function(chapter         = NA,
                      args = list(
                        chapter         = chapter,
                        question_number = question_number,
-                       question_test   = question_test,
+                       question_test   = question_text,
                        s3_audio_loc    = s3_audio_loc
                      ),
                      runtime = 0

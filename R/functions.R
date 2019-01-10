@@ -39,6 +39,7 @@ create_question <- function(
   question_text   = NA,
   s3_audio_loc    = NA
 ) {
+
   con <- redshift_connector()
   question <-
     tibble(

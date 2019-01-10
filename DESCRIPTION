@@ -15,12 +15,14 @@ Depends:
     xlsx,
     RPostgreSQL,
     DBI,
-    jsonlite
+    jsonlite,
+    tictoc
 Requires:
     tidyverse,
     lubridate,
     xlsx,
     RPostgreSQL,
     DBI,
-    jsonlite
+    jsonlite,
+    tictoc
 RoxygenNote: 6.1.1
