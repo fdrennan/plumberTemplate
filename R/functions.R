@@ -77,8 +77,7 @@ create_question <- function(
       UPDATE
         questions
       SET
-        chapter = ', chapter, ',
-        question_number = ', question_number, ',
+        question_text = \'', question_text, '\',
         s3_audio_loc = \'', s3_audio_loc, '\'', ',
         time_added = \'', Sys.time(), '\'
       WHERE
