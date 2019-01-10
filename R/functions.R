@@ -40,7 +40,11 @@ create_question <- function(
   s3_audio_loc    = NA
 ) {
 
+  chapter = as.numeric(chapter)
+  question_number = as.numeric(question_number)
+
   con <- redshift_connector()
+
   question <-
     tibble(
       chapter         = chapter,
@@ -94,7 +98,12 @@ get_question <- function(
   chapter         = NA,
   question_number = NA
 ) {
+
   con <- redshift_connector()
+
+  chapter = as.numeric(chapter)
+  question_number = as.numeric(question_number)
+
   query <-
     paste0(
       '

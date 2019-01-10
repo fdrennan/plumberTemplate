@@ -7,15 +7,15 @@ function(n=100, string = 'I love Meggan!'){
 
 #* Makes a question
 #*
-#* @get /create_question
+#* @get /create_quest
 #*
 #* @serializer unboxedJSON
 #*
 #* @param chapter
 #* @param question_number
-#* @param question_test
+#* @param question_text
 #* @param s3_audio_loc
-create_question <- function(chapter         = NA,
+create_quest <- function(chapter         = NA,
                             question_number = NA,
                             question_text   = NA,
                             s3_audio_loc    = NA) {
@@ -69,19 +69,17 @@ create_question <- function(chapter         = NA,
 
 #* Returns question data.
 #*
-#* @get /get_question
+#* @get /get_quest
 #*
 #* @serializer unboxedJSON
 #*
 #* @param chapter
 #* @param question_number
-get_question <- function(chapter         = NA,
-                         question_number = NA) {
+get_quest <- function(chapter         = NA,
+                      question_number = NA) {
 
   require(plumberTemplate)
   require(tictoc)
-
-  # dummy comment for testing auto-deploy, test 2
 
   # Build the response object (list will be serialized as JSON)
   response <- list(statusCode = 200,
@@ -100,7 +98,7 @@ get_question <- function(chapter         = NA,
     {
       # Run the algorithm
       tic()
-      response$data <- get_question(chapter, question_number)
+      response$data <- get_question(chapter = chapter, question_number = question_number)
       timer <- toc(quiet = T)
       response$console$runtime <- as.numeric(timer$toc - timer$tic)
 
