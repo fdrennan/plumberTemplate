@@ -19,7 +19,7 @@ create_quest <- function(chapter            = NA,
                             question_number = NA,
                             question_text   = NA,
                             s3_audio_loc    = NA) {
-  # 18.220.132.82/create_question?chapter=1&question_number=1&question_text="Hello"&s3_audio_loc="jalsd"
+  # 18.220.132.82/create_quest?chapter=1&question_number=1&question_text="Hello"&s3_audio_loc="jalsd"
   require(plumberTemplate)
   require(tictoc)
 
@@ -65,7 +65,7 @@ create_quest <- function(chapter            = NA,
 }
 
 
-# 18.220.132.82/get_question?question_number=1&chapter=1
+# 18.220.132.82/get_quest?question_number=1&chapter=1
 
 #* Returns question data.
 #*

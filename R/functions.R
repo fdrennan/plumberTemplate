@@ -120,6 +120,10 @@ get_question <- function(
 }
 
 
+upload_file <- function(filename) {
+  paste0('aws s3 cp trying_nginx s3://nsmusicdb/trying_nginx')
+}
+
 
 
 
