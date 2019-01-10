@@ -15,7 +15,7 @@ function(n=100, string = 'I love Meggan!'){
 #* @param question_number
 #* @param question_text
 #* @param s3_audio_loc
-create_quest <- function(chapter         = NA,
+create_quest <- function(chapter            = NA,
                             question_number = NA,
                             question_text   = NA,
                             s3_audio_loc    = NA) {

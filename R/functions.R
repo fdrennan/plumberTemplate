@@ -63,7 +63,8 @@ create_question <- function(
     '
   loc = paste0("  chapter = ", chapter, " AND question_number = ", question_number, collapse = " ")
   query <- paste0(query , loc)
-  if(!is.na(dim(tbl(con, sql(query)))[1])) {
+  existing_data <- tbl(con, sql(query)) %>% as.data.frame
+  if(nrow(existing_data) == 0) {
     dbWriteTable(conn = con,
                  name = "questions",
                  value = question,
