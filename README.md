@@ -131,4 +131,29 @@ Longest transaction:	        7.26
 Shortest transaction:	        0.09
 ```
 
+Install postgres
+```
+sudo apt install postgresql postgresql-contrib
+sudo -i -u postgres
+createuser --interactive
+```
 
+```
+sudo -su postgres
+```
+
+```
+docker-composee up -d
+```
+
+
+```
+CREATE USER fdrennan WITH PASSWORD 'password';
+CREATE DATABASE musicdb OWNER fdrennan;
+```
+
+```
+https://bosnadev.com/2015/12/15/allow-remote-connections-postgresql-database-server/
+
+http://connect.boundlessgeo.com/docs/suite/4.6/dataadmin/pgGettingStarted/firstconnect.html
+```
