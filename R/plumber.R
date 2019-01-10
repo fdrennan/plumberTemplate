@@ -4,6 +4,7 @@ function(n=100, string = 'I love Meggan!'){
   as.vector(a)
 }
 
+
 #* Makes a question
 #*
 #* @get /create_question
@@ -16,9 +17,9 @@ function(n=100, string = 'I love Meggan!'){
 #* @param s3_audio_loc
 create_question <- function(chapter         = NA,
                             question_number = NA,
-                            question_test   = NA,
+                            question_text   = NA,
                             s3_audio_loc    = NA) {
-
+  # 18.220.132.82/create_question?chapter=1&question_number=1&question_text="Hello"&s3_audio_loc="jalsd"
   require(plumberTemplate)
   require(tictoc)
 
@@ -32,7 +33,7 @@ create_question <- function(chapter         = NA,
                      args = list(
                        chapter         = chapter,
                        question_number = question_number,
-                       question_test   = question_text,
+                       question_text   = question_text,
                        s3_audio_loc    = s3_audio_loc
                      ),
                      runtime = 0
@@ -64,6 +65,8 @@ create_question <- function(chapter         = NA,
   return(response)
 }
 
+
+# 18.220.132.82/get_question?question_number=1&chapter=1
 
 #* Returns question data.
 #*
