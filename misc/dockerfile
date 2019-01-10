@@ -15,9 +15,11 @@ RUN R -e "install.packages('tidyverse')"
 RUN R -e "install.packages('lubridate')"
 RUN R -e "install.packages('xlsx')"
 RUN R -e "install.packages('devtools')"
+RUN apt-get install libpq-dev -y
 RUN R -e "install.packages('RPostgreSQL')"
 RUN R -e "install.packages('DBI')"
 RUN R -e "install.packages('jsonlite')"
+RUN R -e "install.packages('tictoc')"
 
 RUN R -e 'devtools::install_github("fdrennan/plumberTemplate", auth_token = "01c3e427280d5441f5f2b830bd2a15e8dd80c39f")'
 

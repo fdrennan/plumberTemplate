@@ -85,7 +85,7 @@ create_question <- function(
   }
 
   dbDisconnect(con)
-  print(question)
+  toJSON(question, pretty = TRUE)
 }
 
 #' @export get_question
