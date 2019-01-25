@@ -22,7 +22,6 @@ RUN R -e "install.packages('jsonlite')"
 RUN R -e "install.packages('tictoc')"
 RUN R -e "install.packages('fortunes')"
 
-RUN apt-get install cowsay
 RUN R -e 'devtools::install_github("fdrennan/plumberTemplate", auth_token = "")'
 
 EXPOSE 8000

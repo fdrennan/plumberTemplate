@@ -4,6 +4,7 @@ function(n=100, string = 'I love Meggan!'){
   as.vector(a)
 }
 
+
 #* Makes a question
 #*
 #* @get /create_quest
@@ -113,47 +114,3 @@ get_quest <- function(chapter         = NA,
   return(response)
 }
 
-
-#* Returns flight data.
-#*
-#* @get /get_flights
-#*
-#* @serializer unboxedJSON
-#*
-#* @param n
-get_quest <- function(n         = NA) {
-
-  require(plumberTemplate)
-  require(tictoc)
-
-  # Build the response object (list will be serialized as JSON)
-  response <- list(statusCode = 200,
-                   data = "",
-                   message = "sucess",
-                   console = list(
-                     args = list(
-                       n         = n
-                     ),
-                     runtime = 0
-                   )
-  )
-
-  response <- tryCatch(
-    {
-      # Run the algorithm
-      tic()
-      response$data <- return_flights(n = n)
-      timer <- toc(quiet = T)
-      response$console$runtime <- as.numeric(timer$toc - timer$tic)
-
-      return(response)
-    },
-    error = function(err) {
-      response$statusCode <- 400
-      response$message <- paste(err)
-      return(response)
-    }
-  )
-
-  return(response)
-}

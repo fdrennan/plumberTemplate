@@ -15,8 +15,8 @@
 
 #' @export update_docker
 update_docker <- function() {
-  system('cp -r misc/. /home/fdrennan/docker_api')
-  system('cp -r R/plumber.R /home/fdrennan/docker_api/plumber.R')
+  system('cp -r misc/. /home/fdrennan/plumberTemplate')
+  system('cp -r R/plumber.R /home/fdrennan/plumberTemplate/misc/plumber.R')
   # docker run --rm -d -p 8000:8000 -v `pwd`/plumber.R:/plumber.R dockerfile /plumber.R
   # cd /home/fdrennan/docker_api
 }
@@ -24,11 +24,11 @@ update_docker <- function() {
 #' @export redshift_connector
 redshift_connector <- function() {
   con <- dbConnect(PostgreSQL(),
-                   dbname   = 'musicdb',
-                   host     = '18.220.132.82',
+                   dbname   = 'website',
+                   host     = 'drenr.com',
                    port     = 5432,
-                   user     = "postgres",
-                   password = "postgres")
+                   user     = "website",
+                   password = "thirdday1")
   con
 }
 
@@ -125,5 +125,19 @@ upload_file <- function(filename) {
 }
 
 
+#' @export return_flights
+return_flights <- function(n = 1) {
+  n = as.numeric(n)
+  con = redshift_connector()
 
+  flights = tbl(con, in_schema("public", 'p_flights'))
 
+  counts <- flights %>%
+    group_by(year, month, day) %>%
+    summarise(n = n()) %>%
+    collect
+
+  counts <- sample_frac(counts, n)
+
+  toJSON(counts, pretty = TRUE)
+}

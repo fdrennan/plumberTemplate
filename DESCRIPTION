@@ -12,17 +12,17 @@ LazyData: true
 Depends:
     tidyverse,
     lubridate,
-    xlsx,
     RPostgreSQL,
     DBI,
     jsonlite,
-    tictoc
+    tictoc,
+    dbplyr
 Requires:
     tidyverse,
     lubridate,
-    xlsx,
     RPostgreSQL,
     DBI,
     jsonlite,
-    tictoc
+    tictoc,
+    dbplyr
 RoxygenNote: 6.1.1
