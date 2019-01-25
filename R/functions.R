@@ -140,4 +140,5 @@ return_flights <- function(n = 1) {
   counts <- sample_frac(counts, n)
 
   toJSON(counts, pretty = TRUE)
+  dbDisconnect(con)
 }
