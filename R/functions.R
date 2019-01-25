@@ -135,10 +135,16 @@ return_flights <- function(n = 1) {
   counts <- flights %>%
     group_by(year, month, day) %>%
     summarise(n = n()) %>%
-    collect
+    collect %>%
+    ungroup
+
+  counts <- counts %>%
+    mutate(date = paste0(year, '-', month, '-', day)) %>%
+    select(date, n)
 
   counts <- sample_frac(counts, n)
 
-  toJSON(counts, pretty = TRUE)
   dbDisconnect(con)
+
+  toJSON(counts, pretty = TRUE)
 }

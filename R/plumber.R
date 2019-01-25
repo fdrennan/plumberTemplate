@@ -121,7 +121,7 @@ get_quest <- function(chapter         = NA,
 #* @serializer unboxedJSON
 #*
 #* @param n
-get_quest <- function(n         = NA) {
+get_flights <- function(n         = NA) {
 
   require(plumberTemplate)
   require(tictoc)
