@@ -22,7 +22,8 @@ RUN R -e "install.packages('jsonlite')"
 RUN R -e "install.packages('tictoc')"
 RUN R -e "install.packages('fortunes')"
 
-RUN R -e 'devtools::install_github("fdrennan/plumberTemplate", auth_token = "0dbf964ae840cb1259e1ecbe5edaabb60bc273b5", quiet = FALSE)'
+RUN echo 'hello'
+RUN R -e 'devtools::install_github("fdrennan/plumberTemplate", auth_token = "0dbf964ae840cb1259e1ecbe5edaabb60bc273b5")'
 
 EXPOSE 8000
 ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(commandArgs()[4]); pr$run(host='0.0.0.0', port=8000)"]

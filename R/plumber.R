@@ -121,7 +121,13 @@ get_quest <- function(chapter         = NA,
 #* @serializer unboxedJSON
 #*
 #* @param n
-get_flights <- function(n         = NA) {
+#* @param from
+#* @param to
+#* @param plot_data
+get_flights <- function(n         = 1,
+                        from = "2013-01-01",
+                        to = "2014-01-01",
+                        plot_data = FALSE) {
 
   require(plumberTemplate)
   require(tictoc)
@@ -132,7 +138,10 @@ get_flights <- function(n         = NA) {
                    message = "sucess",
                    console = list(
                      args = list(
-                       n         = n
+                       n         = n,
+                       from = from,
+                       to = to,
+                       plot_data = plot_data
                      ),
                      runtime = 0
                    )
@@ -142,7 +151,59 @@ get_flights <- function(n         = NA) {
     {
       # Run the algorithm
       tic()
-      response$data <- return_flights(n = n)
+      response$data <- return_flights(n = n, from = from, to = to, plot_data = plot_data)
+      timer <- toc(quiet = T)
+      response$console$runtime <- as.numeric(timer$toc - timer$tic)
+
+      return(response)
+    },
+    error = function(err) {
+      response$statusCode <- 400
+      response$message <- paste(err)
+      return(response)
+    }
+  )
+
+  return(response)
+}
+
+
+#* Returns flight data.
+#* @get /get_flights_plot
+#*
+#* @param n
+#* @param from
+#* @param to
+#* @param plot_data
+#* @png
+get_flights <- function(n = 1,
+                        from = "2013-01-01",
+                        to = "2014-01-01",
+                        plot_data = TRUE) {
+
+  require(plumberTemplate)
+  require(tictoc)
+
+  # Build the response object (list will be serialized as JSON)
+  response <- list(statusCode = 200,
+                   data = "",
+                   message = "sucess",
+                   console = list(
+                     args = list(
+                       n         = n,
+                       from = from,
+                       to = to,
+                       plot_data = plot_data
+                     ),
+                     runtime = 0
+                   )
+  )
+
+  response <- tryCatch(
+    {
+      # Run the algorithm
+      tic()
+      response$data <- return_flights(n = n, from = from, to = to, plot_data = plot_data)
       timer <- toc(quiet = T)
       response$console$runtime <- as.numeric(timer$toc - timer$tic)
 

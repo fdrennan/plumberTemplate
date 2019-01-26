@@ -121,9 +121,26 @@ get_quest <- function(chapter         = NA,
 #* @serializer unboxedJSON
 #*
 #* @param n
-get_quest <- function(n         = NA) {
+get_flights <- function(n         = NA) {
 
   require(plumberTemplate)
+  return_flights <- function(n = 1) {
+    n = as.numeric(n)
+    con = redshift_connector()
+
+    flights = tbl(con, in_schema("public", 'p_flights'))
+
+    counts <- flights %>%
+      group_by(year, month, day) %>%
+      summarise(n = n()) %>%
+      collect
+
+    counts <- sample_frac(counts, n)
+
+    dbDisconnect(con)
+
+    toJSON(counts, pretty = TRUE)
+  }
   require(tictoc)
 
   # Build the response object (list will be serialized as JSON)

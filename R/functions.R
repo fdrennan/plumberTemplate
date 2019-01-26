@@ -126,7 +126,10 @@ upload_file <- function(filename) {
 
 
 #' @export return_flights
-return_flights <- function(n = 1) {
+return_flights <- function(n = 1,
+                           plot_data = FALSE,
+                           from = "2013-01-01",
+                           to = '2014-01-01') {
   n = as.numeric(n)
   con = redshift_connector()
 
@@ -142,9 +145,21 @@ return_flights <- function(n = 1) {
     mutate(date = paste0(year, '-', month, '-', day)) %>%
     select(date, n)
 
-  counts <- sample_frac(counts, n)
+  counts <- sample_frac(counts, n) %>%
+    mutate( date = as.Date(date)) %>%
+    arrange(date) %>%
+    filter(date >= from,
+           date <= to)
 
   dbDisconnect(con)
 
-  toJSON(counts, pretty = TRUE)
+  if (plot_data) {
+    gg = ggplot(counts) +
+      aes(x = date, y = n) +
+      geom_line()
+  } else {
+    return(toJSON(counts, pretty = TRUE))
+  }
+
+  print(gg)
 }
