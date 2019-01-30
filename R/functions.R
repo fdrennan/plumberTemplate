@@ -71,7 +71,6 @@ return_flights <- function(n = 1,
 }
 
 predict_number <- function(data) {
-
   # data = suppressWarnings(readLines('data.txt'))
   download.file('https://s3.us-east-2.amazonaws.com/kerasmods/number_data.txt', 'number_data.txt')
   data = readLines('number_data.txt')
