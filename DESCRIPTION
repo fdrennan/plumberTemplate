@@ -16,7 +16,10 @@ Depends:
     DBI,
     jsonlite,
     tictoc,
-    dbplyr
+    dbplyr,
+    keras,
+    OpenImageR,
+    fields
 Requires:
     tidyverse,
     lubridate,
@@ -24,5 +27,8 @@ Requires:
     DBI,
     jsonlite,
     tictoc,
-    dbplyr
+    dbplyr,
+    keras,
+    OpenImageR,
+    fields
 RoxygenNote: 6.1.1

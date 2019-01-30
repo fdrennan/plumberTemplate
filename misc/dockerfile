@@ -21,9 +21,17 @@ RUN R -e "install.packages('DBI')"
 RUN R -e "install.packages('jsonlite')"
 RUN R -e "install.packages('tictoc')"
 RUN R -e "install.packages('fortunes')"
+RUN R -e "install.packages('keras')"
+RUN R -e "install.packages('fields')"
 
-RUN echo 'hello'
-RUN R -e 'devtools::install_github("fdrennan/plumberTemplate", auth_token = "")'
+RUN apt-get update -qq && apt-get install -y \
+  libtiff5-dev
+
+RUN R -e "install.packages('tiff')"
+RUN R -e "install.packages('OpenImageR')"
+
+RUN R -e 'devtools::install_github("fdrennan/plumberTemplate", auth_token = "", ref = "v1")'
+
 
 EXPOSE 8000
 ENTRYPOINT ["R", "-e", "pr <- plumber::plumb(commandArgs()[4]); pr$run(host='0.0.0.0', port=8000)"]

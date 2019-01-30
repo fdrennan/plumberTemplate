@@ -4,6 +4,22 @@ function(n=100, string = 'I love Meggan!'){
   as.vector(a)
 }
 
+#' @filter cors
+cors <- function(req, res) {
+
+  res$setHeader("Access-Control-Allow-Origin", "*")
+
+  if (req$REQUEST_METHOD == "OPTIONS") {
+    res$setHeader("Access-Control-Allow-Methods","*")
+    res$setHeader("Access-Control-Allow-Headers", req$HTTP_ACCESS_CONTROL_REQUEST_HEADERS)
+    res$status <- 200
+    return(list())
+  } else {
+    plumber::forward()
+  }
+
+}
+
 #* Makes a question
 #*
 #* @get /create_quest
@@ -115,32 +131,20 @@ get_quest <- function(chapter         = NA,
 
 
 #* Returns flight data.
-#*
 #* @get /get_flights
 #*
 #* @serializer unboxedJSON
 #*
 #* @param n
-get_flights <- function(n         = NA) {
+#* @param from
+#* @param to
+#* @param plot_data
+get_flights <- function(n         = 1,
+                        from = "2013-01-01",
+                        to = "2014-01-01",
+                        plot_data = FALSE) {
 
   require(plumberTemplate)
-  return_flights <- function(n = 1) {
-    n = as.numeric(n)
-    con = redshift_connector()
-
-    flights = tbl(con, in_schema("public", 'p_flights'))
-
-    counts <- flights %>%
-      group_by(year, month, day) %>%
-      summarise(n = n()) %>%
-      collect
-
-    counts <- sample_frac(counts, n)
-
-    dbDisconnect(con)
-
-    toJSON(counts, pretty = TRUE)
-  }
   require(tictoc)
 
   # Build the response object (list will be serialized as JSON)
@@ -149,7 +153,10 @@ get_flights <- function(n         = NA) {
                    message = "sucess",
                    console = list(
                      args = list(
-                       n         = n
+                       n         = n,
+                       from = from,
+                       to = to,
+                       plot_data = plot_data
                      ),
                      runtime = 0
                    )
@@ -159,7 +166,59 @@ get_flights <- function(n         = NA) {
     {
       # Run the algorithm
       tic()
-      response$data <- return_flights(n = n)
+      response$data <- return_flights(n = n, from = from, to = to, plot_data = plot_data)
+      timer <- toc(quiet = T)
+      response$console$runtime <- as.numeric(timer$toc - timer$tic)
+
+      return(response)
+    },
+    error = function(err) {
+      response$statusCode <- 400
+      response$message <- paste(err)
+      return(response)
+    }
+  )
+
+  return(response)
+}
+
+
+#* Returns flight data.
+#* @get /get_flights_plot
+#*
+#* @param n
+#* @param from
+#* @param to
+#* @param plot_data
+#* @png
+get_flights <- function(n = 1,
+                        from = "2013-01-01",
+                        to = "2014-01-01",
+                        plot_data = TRUE) {
+
+  require(plumberTemplate)
+  require(tictoc)
+
+  # Build the response object (list will be serialized as JSON)
+  response <- list(statusCode = 200,
+                   data = "",
+                   message = "sucess",
+                   console = list(
+                     args = list(
+                       n         = n,
+                       from = from,
+                       to = to,
+                       plot_data = plot_data
+                     ),
+                     runtime = 0
+                   )
+  )
+
+  response <- tryCatch(
+    {
+      # Run the algorithm
+      tic()
+      response$data <- return_flights(n = n, from = from, to = to, plot_data = plot_data)
       timer <- toc(quiet = T)
       response$console$runtime <- as.numeric(timer$toc - timer$tic)
 

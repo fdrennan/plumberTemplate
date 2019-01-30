@@ -17,8 +17,6 @@
 update_docker <- function() {
   system('cp -r misc/. /home/fdrennan/plumberTemplate')
   system('cp -r R/plumber.R /home/fdrennan/plumberTemplate/misc/plumber.R')
-  # docker run --rm -d -p 8000:8000 -v `pwd`/plumber.R:/plumber.R dockerfile /plumber.R
-  # cd /home/fdrennan/docker_api
 }
 
 #' @export redshift_connector
@@ -30,98 +28,6 @@ redshift_connector <- function() {
                    user     = "website",
                    password = "thirdday1")
   con
-}
-
-#' @export create_question
-create_question <- function(
-  chapter         = NA,
-  question_number = NA,
-  question_text   = NA,
-  s3_audio_loc    = NA
-) {
-
-  chapter = as.numeric(chapter)
-  question_number = as.numeric(question_number)
-
-  con <- redshift_connector()
-
-  question <-
-    tibble(
-      chapter         = chapter,
-      question_number = question_number,
-      question_text   = question_text,
-      s3_audio_loc    = s3_audio_loc,
-      time_added      = Sys.time()
-    )
-
-  query <- '
-    SELECT
-      chapter, question_number
-    FROM
-      questions
-    WHERE
-    '
-  loc = paste0("  chapter = ", chapter, " AND question_number = ", question_number, collapse = " ")
-  query <- paste0(query , loc)
-  existing_data <- tbl(con, sql(query)) %>% as.data.frame
-  if(nrow(existing_data) == 0) {
-    dbWriteTable(conn = con,
-                 name = "questions",
-                 value = question,
-                 append = TRUE,
-                 row.names = FALSE)
-
-  } else {
-    query <-
-      paste0(
-        '
-      UPDATE
-        questions
-      SET
-        question_text = \'', question_text, '\',
-        s3_audio_loc = \'', s3_audio_loc, '\'', ',
-        time_added = \'', Sys.time(), '\'
-      WHERE
-        chapter = ', chapter, ' AND question_number = ', question_number
-      )
-
-    dbSendQuery(con, query)
-
-  }
-
-  dbDisconnect(con)
-  return(toJSON(question, pretty = TRUE))
-}
-
-#' @export get_question
-get_question <- function(
-  chapter         = NA,
-  question_number = NA
-) {
-
-  con <- redshift_connector()
-
-  chapter = as.numeric(chapter)
-  question_number = as.numeric(question_number)
-
-  query <-
-    paste0(
-      '
-      SELECT
-        *
-      FROM
-        questions
-      WHERE
-        chapter = ', chapter, ' AND question_number = ', question_number
-    )
-  response <- tbl(con, sql(query)) %>% as.data.frame
-  dbDisconnect(con)
-  return(toJSON(response, pretty = TRUE))
-}
-
-
-upload_file <- function(filename) {
-  paste0('aws s3 cp trying_nginx s3://nsmusicdb/trying_nginx')
 }
 
 
@@ -163,3 +69,27 @@ return_flights <- function(n = 1,
 
   print(gg)
 }
+
+predict_number <- function(data) {
+
+  # data = suppressWarnings(readLines('data.txt'))
+  download.file('https://s3.us-east-2.amazonaws.com/kerasmods/number_data.txt', 'number_data.txt')
+  data = readLines('number_data.txt')
+  split <- data %>%
+    str_split(",") %>%
+    .[1] %>% .[[1]] %>% as.numeric %>% as.matrix()
+
+  data = array_reshape(split, c(250, 250, 4))
+  image_1 = data[,,1]
+  image_1 = resizeImage(image_1, 28, 28)
+  image_1 = image.smooth(image_1)$z
+  image_1 = image_1/max(image_1)
+  image_1 = round(image_1, 4)
+  # model = model_from_json(plumberTemplate::mod)
+  download.file('https://s3.us-east-2.amazonaws.com/kerasmods/model.hdf5', 'model.hdf5')
+  model = load_model_hdf5('model.hdf5')
+  value = predict_classes(model, array_reshape(image_1, c(1, 28, 28, 1)))
+  toJSON(value)
+}
+
+
